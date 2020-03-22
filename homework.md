@@ -188,6 +188,75 @@ INSERT INTO stations (
 CREATE INDEX idx_name ON stations(name);
 ```
 
+### Clean up the trips table
+```
+UPDATE
+    trips
+SET
+    from_station_id = s.id
+FROM
+    stations s
+WHERE
+    trips.from_station_name = s.name
+AND
+    trips.from_station_id IS NULL;
+
+UPDATE
+    trips
+SET
+    to_station_id = s.id
+FROM
+    stations s
+WHERE
+    trips.to_station_name = s.name
+AND
+    trips.to_station_id IS NULL;
+
+UPDATE
+    trips
+SET
+    from_station_name = s.name
+FROM
+    stations s
+WHERE
+    trips.from_station_id = s.id
+AND
+    trips.from_station_name IS NULL;
+
+UPDATE
+    trips
+SET
+    to_station_name = s.name
+FROM
+    stations s
+WHERE
+    trips.to_station_id = s.id
+AND
+    trips.to_station_name IS NULL;
+
+UPDATE
+    trips
+SET
+    to_station_name = s.name
+FROM
+    stations s
+WHERE
+    trips.to_station_id = s.id
+AND
+    trips.to_station_name != s.name;
+
+UPDATE
+    trips
+SET
+    from_station_name = s.name
+FROM
+    stations s
+WHERE
+    trips.from_station_id = s.id
+AND
+    trips.from_station_name != s.name;
+```
+
 ## Part 2: Missing Date Data
 
 You may have noticed that we have the dates as strings. This is because the dataset we have uses an inconsistent format for dates 😔😔😔
